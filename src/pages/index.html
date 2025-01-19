@@ -2,18 +2,23 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
     <title>LWmail</title>
+    <link rel="stylesheet" href="./index.css" />
+
+    <style type="text/css"></style>
   </head>
   <body>
-    <div></div>
+    <div class="container">
+      <div class="header">
+        <div class="add-mail">
+          <img src="../../static/add.svg" alt="add" />
+        </div>
+      </div>
+      <div class="main">
+        <div class="left-bar">left</div>
+        <div class="mail-window">right</div>
+      </div>
+    </div>
   </body>
   <script src="./index.js"></script>
 </html>
