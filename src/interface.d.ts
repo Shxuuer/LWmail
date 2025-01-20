@@ -1,5 +1,5 @@
 export interface mail {
-  getMailBoxes: () => Promise<any>;
+  safeStorageMailInfo: (mail: {}) => Promise<any>;
 }
 
 declare global {

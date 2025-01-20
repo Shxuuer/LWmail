@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('mail', {
-  getMailBoxes: () => ipcRenderer.invoke('get-mail-boxes'),
-  getMailBox: (boxName: string) => ipcRenderer.invoke('get-mail-box', boxName),
+  safeStorageMailInfo: (mail: {}) =>
+    ipcRenderer.send('safe-storage-mail-info', mail),
 });

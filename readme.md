@@ -5,6 +5,6 @@ LWmail: A concise email client
 ## build
 
 ```bash
-npm install
-npm buildjs
+yarn install
+npm run buildjs
 ```

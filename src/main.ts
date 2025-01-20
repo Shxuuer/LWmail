@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
 import * as path from 'path';
-import { mailServices } from './mail/mailManager';
+import { LocalStorage } from 'node-localstorage';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -36,17 +36,12 @@ const createTray = () => {
 };
 
 const handleIPC = () => {
-  ipcMain.handle('get-mail-boxes', async () => {
-    // return mailServices.map(
-    //   async (mailService) => await mailService.getMailBoxes(),
-    // );
-    return mailServices[0].getMailBoxes();
-    // return mailServices.map((mailService) => mailService.getMailBoxes());
-  });
-  ipcMain.handle('get-mail-box', async (event, boxName: string) => {
-    return mailServices.map(
-      async (mailService) => await mailService.getMailBox(boxName),
+  ipcMain.on('safe-storage-mail-info', (event, mail) => {
+    const localStorage: LocalStorage = new LocalStorage(
+      path.join(__dirname, 'config'),
     );
+    localStorage.setItem('mail', JSON.stringify(mail));
+    console.log(localStorage.getItem('mail'));
   });
 };
 

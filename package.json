@@ -1,6 +1,6 @@
 {
-  "name": "email",
-  "version": "1.0.0",
+  "name": "lw-mail",
+  "version": "0.0.2",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -13,11 +13,11 @@
   "dependencies": {
     "iconv-lite": "^0.6.3",
     "imap": "^0.8.19",
+    "node-localstorage": "^3.0.5",
     "readline": "^1.3.0"
   },
   "devDependencies": {
-    "@types/electron": "^1.6.12",
-    "@types/node": "^22.10.7",
+    "@types/node-localstorage": "^1.3.3",
     "copyfiles": "^2.4.1",
     "electron": "^34.0.0",
     "nodemon": "^3.1.9",
