@@ -17,7 +17,7 @@ const createWindow = () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 const createTray = () => {
@@ -53,6 +53,7 @@ const handleIPC = () => {
 app.whenReady().then(() => {
   createTray();
   handleIPC();
+  createWindow();
 });
 
 app.on('window-all-closed', () => {});
