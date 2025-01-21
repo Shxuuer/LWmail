@@ -7,6 +7,7 @@ import {
   Mail,
 } from '../mail/mailManager';
 import { mainWindow } from './ui';
+import { shell } from 'electron';
 
 /**
  * Handle IPC messages
@@ -26,6 +27,11 @@ export function handleIPC(): void {
         }
         event.returnValue = err;
       });
+  });
+  ipcMain.on('open-how-to-add', () => {
+    shell.openExternal(
+      'https://github.com/Shxuuer/LWmail/blob/master/readme.md',
+    );
   });
 }
 

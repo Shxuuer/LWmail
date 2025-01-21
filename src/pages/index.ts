@@ -74,7 +74,7 @@ function removePop() {
 }
 
 // add mail: after click, create a pop to input mail information
-document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
+document.getElementById('add-mail')?.addEventListener('click', () => {
   const inputPop = document.createElement('div');
   inputPop.className = 'input-pop';
   const title = document.createElement('div');
@@ -165,6 +165,11 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
   });
 
   createPop(inputPop);
+});
+
+// open how to add
+document.getElementById('how-to-add')?.addEventListener('click', () => {
+  window.mail.openHowToAdd();
 });
 
 // when mails update, update the left bar
