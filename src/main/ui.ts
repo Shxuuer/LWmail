@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu, Tray } from 'electron';
 import * as path from 'path';
 
-let mainWindow: BrowserWindow | null = null;
+export let mainWindow: BrowserWindow | null = null;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({

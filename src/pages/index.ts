@@ -44,10 +44,13 @@ function createPop(inner: HTMLElement) {
   body.appendChild(pop);
 }
 
-const leftBar = document.getElementById('left-bar');
-const inner = createOneMail('shenxu@bupt.edu.cn', ['收件箱']);
-leftBar?.appendChild(inner);
+function removePop() {
+  const body = document.body;
+  const pop = document.getElementsByClassName('pop')[0];
+  body.removeChild(pop);
+}
 
+// add mail: after click, create a pop to input mail information
 document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
   const inputPop = document.createElement('div');
   inputPop.className = 'input-pop';
@@ -80,12 +83,13 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
     return container;
   }
   const infos = [
-    { label: 'imap服务器', id: 'imap', default: 'imap.exmail.qq.com' },
+    { label: 'imap服务器', id: 'imap' },
     { label: 'imap端口号', id: 'imap-port', default: '993' },
     { label: 'smtp服务器', id: 'smtp' },
     { label: 'smtp端口号', id: 'smtp-port', default: '465' },
-    { label: '邮箱地址', id: 'mail-addr', default: 'shenxu@bupt.edu.cn' },
-    { label: '密码', id: 'password', password: true, default: '20041206Sxx' },
+    { label: '邮箱地址', id: 'mail-addr' },
+    { label: '密码', id: 'password', password: true },
+    { label: 'Token (if needed)', id: 'accessToken' },
   ];
   infos.forEach((info) => {
     inputArea.appendChild(createInput(info));
@@ -104,8 +108,25 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
       smtpPort: (inputs[3] as HTMLInputElement).value,
       mailAddr: (inputs[4] as HTMLInputElement).value,
       password: (inputs[5] as HTMLInputElement).value,
+      accessToken: (inputs[6] as HTMLInputElement).value,
     };
-    console.log(window.mail.addNewMail(mail));
+    if (window.mail.addNewMail(mail)) {
+      removePop();
+    } else {
+      alert('添加失败');
+    }
   });
   createPop(inputPop);
+});
+
+const leftBar = document.getElementById('left-bar');
+
+// when mails update, update the left bar
+window.mail.onMailsUpdate((mails: []) => {
+  // 清除原有的邮件
+  if (leftBar) leftBar.innerHTML = '';
+  mails.forEach((mail: { mailAddr: string }) => {
+    const inner = createOneMail(mail.mailAddr, []);
+    leftBar?.appendChild(inner);
+  });
 });

@@ -1,5 +1,6 @@
 export interface mail {
-  addNewMail: (mail: {}) => Promise<any>;
+  addNewMail: (mail: {}) => boolean;
+  onMailsUpdate: (callback: (mails: []) => void) => void;
 }
 
 declare global {

@@ -1,41 +1,73 @@
 import { MailService } from '../mail/MailService';
+import { updateMailsToRenderer } from '../main/ipc';
 import * as path from 'path';
 import fs from 'fs';
 import { safeStorage } from 'electron';
 
-interface Mail {
+export interface Mail {
   imap: string;
   imapPort: string;
   smtp: string;
   smtpPort: string;
   mailAddr: string;
   password: string;
+  accessToken?: string;
   client?: MailService;
 }
 
 const mails: Mail[] = [];
 
-export function getMails() {
+/**
+ * get registered mails list
+ * @returns Mail[] registered mails
+ */
+export function getMails(): Mail[] {
   return mails;
 }
 
+/**
+ * register a new mail
+ * @param mail Mail mail to be registered
+ */
 export async function addMail(mail: Mail) {
   const client = new MailService(mail);
-  client
+  await client
     .connect()
     .then(() => {
       mail.client = client;
       mails.push(mail);
+      updateMailsToRenderer();
     })
     .catch((err) => {
       console.log(err);
     });
 }
 
-function readMailListFromDisk() {
+/**
+ * remove a mail from registered mails
+ * @param mail Mail mail to be removed
+ */
+export function removeMail(mail: Mail) {
+  const index = mails.indexOf(mail);
+  if (index !== -1) {
+    mails.splice(index, 1);
+    // mail.client?.close();
+    // updateMailsToRenderer();
+  }
+}
+
+/**
+ * read mail list from disk
+ * @returns string[] mail list
+ */
+function readMailListFromDisk(): string[] {
   return fs.readdirSync(path.join(__dirname, '../config/mails'));
 }
 
+/**
+ * read mails from disk
+ * @returns Mail[] mails read from disk
+ */
 function readMailsFromDisk(): Mail[] {
   const list = readMailListFromDisk();
   return list.map((mailAddr) => {
@@ -47,9 +79,13 @@ function readMailsFromDisk(): Mail[] {
   });
 }
 
-export function writeMailIntoDisk(mail: Mail) {
+/**
+ * write mail into disk
+ * @param mail Mail mail to be written into disk
+ */
+export function writeMailIntoDisk(mail: Mail): void {
   let buffer: Buffer = safeStorage.encryptString(JSON.stringify(mail));
-  if (!fs.existsSync(path.join(__dirname, '../config/mails', mail.mailAddr))) {
+  if (!fs.existsSync(path.join(__dirname, '../config/mails'))) {
     fs.mkdirSync(path.join(__dirname, '../config/mails'));
   }
   fs.writeFileSync(
@@ -58,7 +94,12 @@ export function writeMailIntoDisk(mail: Mail) {
   );
 }
 
-export async function checkMail(mail: Mail) {
+/**
+ * check mail connection
+ * @param mail Mail mail to be checked
+ * @returns Promise<boolean> connection status
+ */
+export async function checkMail(mail: Mail): Promise<boolean> {
   return new Promise((resolve, reject) => {
     new MailService(mail)
       .connect()
@@ -72,7 +113,10 @@ export async function checkMail(mail: Mail) {
   });
 }
 
-export function startMailManager() {
+/**
+ * start mail manager
+ */
+export function startMailManager(): void {
   readMailsFromDisk().forEach((item) => {
     addMail(item);
   });

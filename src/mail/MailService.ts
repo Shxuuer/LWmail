@@ -5,6 +5,7 @@ class MailService {
   private port: string;
   private user: string;
   private password: string;
+  private accessToken: string | undefined;
   private verifyOnly: boolean = false;
   private client: ImapFlow | null = null;
 
@@ -16,6 +17,7 @@ class MailService {
       smtpPort: string;
       mailAddr: string;
       password: string;
+      accessToken?: string;
     },
     verifyOnly: boolean = false,
   ) {
@@ -23,6 +25,7 @@ class MailService {
     this.port = info.imapPort;
     this.user = info.mailAddr;
     this.password = info.password;
+    this.accessToken = info.accessToken;
     this.verifyOnly = verifyOnly;
   }
 
@@ -36,6 +39,7 @@ class MailService {
       auth: {
         user: this.user,
         pass: this.password,
+        accessToken: this.accessToken,
       },
     });
     return this.client.connect();
