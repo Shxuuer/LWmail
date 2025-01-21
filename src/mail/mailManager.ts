@@ -107,8 +107,7 @@ export async function checkMail(mail: Mail): Promise<boolean> {
         resolve(true);
       })
       .catch((err) => {
-        console.log(err);
-        reject(false);
+        reject(err);
       });
   });
 }

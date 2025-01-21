@@ -1,3 +1,8 @@
+/**
+ * create a mail box
+ * @param boxName box name
+ * @returns HTMLElement mail box
+ */
 function createMailBox(boxName: string) {
   const mailBox = document.createElement('div');
   mailBox.className = 'mail-box';
@@ -11,6 +16,11 @@ function createMailBox(boxName: string) {
   return mailBox;
 }
 
+/**
+ * create mail boxes
+ * @param boxes box names
+ * @returns HTMLElement mail boxes
+ */
 function createMailBoxes(boxes: string[]) {
   const mailBoxes = document.createElement('div');
   mailBoxes.className = 'mail-boxes';
@@ -20,6 +30,12 @@ function createMailBoxes(boxes: string[]) {
   return mailBoxes;
 }
 
+/**
+ * create one mail element
+ * @param mail mail address
+ * @param boxes mail boxes
+ * @returns HTMLElement mail element
+ */
 function createOneMail(mail: string, boxes: string[]) {
   const oneMail = document.createElement('div');
   oneMail.className = 'one-mail';
@@ -36,6 +52,10 @@ function createOneMail(mail: string, boxes: string[]) {
   return oneMail;
 }
 
+/**
+ * create a pop
+ * @param inner pop content
+ */
 function createPop(inner: HTMLElement) {
   const body = document.body;
   const pop = document.createElement('div');
@@ -44,6 +64,9 @@ function createPop(inner: HTMLElement) {
   body.appendChild(pop);
 }
 
+/**
+ * remove a pop
+ */
 function removePop() {
   const body = document.body;
   const pop = document.getElementsByClassName('pop')[0];
@@ -56,7 +79,15 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
   inputPop.className = 'input-pop';
   const title = document.createElement('div');
   title.className = 'input-pop-title';
-  title.innerText = '添加邮箱';
+  const titleInner = document.createElement('span');
+  titleInner.className = 'input-pop-title-inner';
+  titleInner.innerText = '添加邮箱';
+  title.appendChild(titleInner);
+  const close = document.createElement('img');
+  close.src = '../../static/close.svg';
+  close.className = 'input-pop-close';
+  close.addEventListener('click', removePop);
+  title.appendChild(close);
   inputPop.appendChild(title);
   const inputArea = document.createElement('div');
   inputArea.className = 'input-pop-area';
@@ -82,6 +113,20 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
     container.appendChild(inputElement);
     return container;
   }
+
+  function setErrorMessage(msg: string, color?: string) {
+    let error: HTMLElement | null = document.getElementsByClassName(
+      'input-pop-error',
+    )[0] as HTMLElement;
+    if (!error) {
+      error = document.createElement('div');
+      error.className = 'input-pop-error';
+    }
+    error.innerText = msg;
+    error.style.color = color || '#3e3e3e';
+    inputPop.insertBefore(error, confirm);
+  }
+
   const infos = [
     { label: 'imap服务器', id: 'imap' },
     { label: 'imap端口号', id: 'imap-port', default: '993' },
@@ -100,6 +145,7 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
   confirm.className = 'input-pop-confirm';
   inputPop.appendChild(confirm);
   confirm.addEventListener('click', () => {
+    setErrorMessage('fetch from server...', 'green');
     const inputs = document.getElementsByClassName('input-pop-input');
     const mail = {
       imap: (inputs[0] as HTMLInputElement).value,
@@ -110,18 +156,19 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
       password: (inputs[5] as HTMLInputElement).value,
       accessToken: (inputs[6] as HTMLInputElement).value,
     };
-    if (window.mail.addNewMail(mail)) {
-      removePop();
-    } else {
-      alert('添加失败');
-    }
+    setTimeout(() => {
+      const res = window.mail.addNewMail(mail);
+      if (res === true) removePop();
+      else if (res === false) setErrorMessage('添加失败', 'red');
+      else setErrorMessage(res, 'red');
+    }, 100);
   });
+
   createPop(inputPop);
 });
 
-const leftBar = document.getElementById('left-bar');
-
 // when mails update, update the left bar
+const leftBar = document.getElementById('left-bar');
 window.mail.onMailsUpdate((mails: []) => {
   // 清除原有的邮件
   if (leftBar) leftBar.innerHTML = '';

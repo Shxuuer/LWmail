@@ -41,6 +41,7 @@ class MailService {
         pass: this.password,
         accessToken: this.accessToken,
       },
+      connectionTimeout: 10000,
     });
     return this.client.connect();
   }

@@ -130,9 +130,23 @@
 .input-pop-title {
   width: 100%;
   padding: 5px 10px;
-  font-size: 1.3em;
   border-bottom: 1px solid #e0e0e0;
   height: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+.input-pop-title-inner {
+  font-size: 1.3em;
+}
+.input-pop-close {
+  position: absolute;
+  right: 10px;
+  color: #f02222;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
 }
 .input-pop-area {
   width: 100%;
@@ -161,6 +175,18 @@
 }
 .input-pop-confirm {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
   height: 2em;
+  border-radius: 0 0 5px 5px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s all;
+}
+.input-pop-confirm:hover {
+  background-color: #f0f5ff;
+}
+.input-pop-error {
+  padding-left: 5px;
+  font-size: 0.9em;
+  width: 100%;
 }

@@ -21,7 +21,10 @@ export function handleIPC(): void {
       })
       .catch((err) => {
         console.log(err);
-        event.returnValue = false;
+        if (err.response) {
+          err = 'from server: ' + err.response;
+        }
+        event.returnValue = err;
       });
   });
 }
