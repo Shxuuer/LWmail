@@ -1,6 +1,11 @@
 # LWmail
 
-LWmail: A concise email client
+LWmail: A concise email client.
+**Everything is in the initial stage**
+
+## Why do we want to make LWmail?
+
+The number of emails in everyone's hands is increasing, and they all come from different email providers. The demand for unified management and real-time reminders is growing. At the same time, most email clients on the market have stopped maintenance or have redundant functions, and there is an urgent need for a clear and centralized email client with clear pages.
 
 ## How to add a new email user?
 
