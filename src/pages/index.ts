@@ -63,6 +63,7 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
     label: string;
     id: string;
     password?: boolean;
+    default?: string;
   }) {
     const container = document.createElement('div');
     container.className = 'input-pop-container';
@@ -71,6 +72,7 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
     labelElement.className = 'input-pop-label';
     const inputElement = document.createElement('input');
     inputElement.type = info.password ? 'password' : 'text';
+    inputElement.value = info.default || '';
     inputElement.id = info.id;
     inputElement.className = 'input-pop-input';
     container.appendChild(labelElement);
@@ -78,12 +80,12 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
     return container;
   }
   const infos = [
-    { label: 'imap服务器', id: 'imap' },
-    { label: 'imap端口号', id: 'imap-port' },
+    { label: 'imap服务器', id: 'imap', default: 'imap.exmail.qq.com' },
+    { label: 'imap端口号', id: 'imap-port', default: '993' },
     { label: 'smtp服务器', id: 'smtp' },
-    { label: 'smtp端口号', id: 'smtp-port' },
-    { label: '邮箱地址', id: 'mail-addr' },
-    { label: '密码', id: 'password', password: true },
+    { label: 'smtp端口号', id: 'smtp-port', default: '465' },
+    { label: '邮箱地址', id: 'mail-addr', default: 'shenxu@bupt.edu.cn' },
+    { label: '密码', id: 'password', password: true, default: '20041206Sxx' },
   ];
   infos.forEach((info) => {
     inputArea.appendChild(createInput(info));
@@ -103,7 +105,7 @@ document.getElementsByClassName('add-mail')[0].addEventListener('click', () => {
       mailAddr: (inputs[4] as HTMLInputElement).value,
       password: (inputs[5] as HTMLInputElement).value,
     };
-    window.mail.safeStorageMailInfo(mail);
+    console.log(window.mail.addNewMail(mail));
   });
   createPop(inputPop);
 });

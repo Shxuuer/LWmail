@@ -1,90 +1,51 @@
-const Imap = require('imap');
-const readline = require('readline');
-const iconv = require('iconv-lite');
+import { ImapFlow, ListResponse } from 'imapflow';
 
 class MailService {
   private host: string;
   private port: string;
   private user: string;
   private password: string;
-  private imap: any;
+  private verifyOnly: boolean = false;
+  private client: ImapFlow | null = null;
 
-  constructor(host: string, port: string, user: string, password: string) {
-    this.host = host;
-    this.port = port;
-    this.user = user;
-    this.password = password;
-    this.connect();
+  constructor(
+    info: {
+      imap: string;
+      imapPort: string;
+      smtp: string;
+      smtpPort: string;
+      mailAddr: string;
+      password: string;
+    },
+    verifyOnly: boolean = false,
+  ) {
+    this.host = info.imap;
+    this.port = info.imapPort;
+    this.user = info.mailAddr;
+    this.password = info.password;
+    this.verifyOnly = verifyOnly;
   }
 
-  private async connect() {
-    this.imap = new Imap({
-      user: this.user,
-      password: this.password,
+  public async connect() {
+    this.client = new ImapFlow({
       host: this.host,
-      port: this.port,
-      tls: true,
+      port: Number(this.port),
+      secure: true,
+      logger: false,
+      verifyOnly: this.verifyOnly,
+      auth: {
+        user: this.user,
+        pass: this.password,
+      },
     });
-
-    this.imap.once('end', () => {
-      console.log('Connection ended');
-    });
-
-    this.imap.once('error', (err: any) => {
-      console.log(err);
-    });
-
-    this.imap.connect();
+    return this.client.connect();
   }
 
-  public getMailBoxes() {
-    return new Promise((resolve, reject) => {
-      this.imap.once('ready', () => {
-        this.imap.getBoxes((err: any, boxes: any) => {
-          if (err) reject(err);
-          resolve(boxes);
-        });
-      });
-    });
+  public async getMailBoxes(): Promise<ListResponse[] | undefined> {
+    return this.client?.list();
   }
 
-  public async getMailBox(boxName: string) {
-    return new Promise((resolve, reject) => {
-      this.imap.once('ready', () => {
-        this.imap.openBox(boxName, true, (err: any, box: any) => {
-          if (err) reject(err);
-          resolve(box);
-        });
-      });
-    });
-    // this.imap.once('ready', () => {
-    //   this.imap.openBox(boxName, true, (err: any, box: any) => {
-    //     if (err) throw err;
-    //     const f = this.imap.seq.fetch('1:3', {
-    //       bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
-    //       struct: true,
-    //     });
-    //     f.on('message', (msg: any) => {
-    //       msg.on('body', (stream: any, info: any) => {
-    //         let buffer = '';
-    //         stream.on('data', (chunk: any) => {
-    //           buffer += chunk.toString('utf8');
-    //         });
-    //         stream.once('end', () => {
-    //           console.log(Imap.parseHeader(buffer));
-    //         });
-    //       });
-    //     });
-    //     f.once('error', (err: any) => {
-    //       console.log('Fetch error: ' + err);
-    //     });
-    //     f.once('end', () => {
-    //       console.log('Done fetching all messages!');
-    //       this.imap.end();
-    //     });
-    //   });
-    // });
-  }
+  public async getMailBox(boxName: string) {}
 }
 
 export { MailService };

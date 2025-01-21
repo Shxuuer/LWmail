@@ -1,5 +1,5 @@
 export interface mail {
-  safeStorageMailInfo: (mail: {}) => Promise<any>;
+  addNewMail: (mail: {}) => Promise<any>;
 }
 
 declare global {
