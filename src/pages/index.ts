@@ -81,7 +81,7 @@ document.getElementById('add-mail')?.addEventListener('click', () => {
   title.className = 'input-pop-title';
   const titleInner = document.createElement('span');
   titleInner.className = 'input-pop-title-inner';
-  titleInner.innerText = '添加邮箱';
+  titleInner.innerText = 'New email';
   title.appendChild(titleInner);
   const close = document.createElement('img');
   close.src = '../../static/close.svg';
@@ -128,12 +128,12 @@ document.getElementById('add-mail')?.addEventListener('click', () => {
   }
 
   const infos = [
-    { label: 'imap服务器', id: 'imap' },
-    { label: 'imap端口号', id: 'imap-port', default: '993' },
-    { label: 'smtp服务器', id: 'smtp' },
-    { label: 'smtp端口号', id: 'smtp-port', default: '465' },
-    { label: '邮箱地址', id: 'mail-addr' },
-    { label: '密码', id: 'password', password: true },
+    { label: 'imap server', id: 'imap' },
+    { label: 'imap port', id: 'imap-port', default: '993' },
+    { label: 'smtp server', id: 'smtp' },
+    { label: 'smtp port', id: 'smtp-port', default: '465' },
+    { label: 'email address', id: 'mail-addr' },
+    { label: 'password', id: 'password', password: true },
     { label: 'Token (if needed)', id: 'accessToken' },
   ];
   infos.forEach((info) => {
@@ -141,7 +141,7 @@ document.getElementById('add-mail')?.addEventListener('click', () => {
   });
 
   const confirm = document.createElement('button');
-  confirm.innerText = '确定';
+  confirm.innerText = 'OK';
   confirm.className = 'input-pop-confirm';
   inputPop.appendChild(confirm);
   confirm.addEventListener('click', () => {
@@ -159,7 +159,7 @@ document.getElementById('add-mail')?.addEventListener('click', () => {
     setTimeout(() => {
       const res = window.mail.addNewMail(mail);
       if (res === true) removePop();
-      else if (res === false) setErrorMessage('添加失败', 'red');
+      else if (res === false) setErrorMessage('fail', 'red');
       else setErrorMessage(res, 'red');
     }, 100);
   });
@@ -175,7 +175,6 @@ document.getElementById('how-to-add')?.addEventListener('click', () => {
 // when mails update, update the left bar
 const leftBar = document.getElementById('left-bar');
 window.mail.onMailsUpdate((mails: []) => {
-  // 清除原有的邮件
   if (leftBar) leftBar.innerHTML = '';
   mails.forEach((mail: { mailAddr: string }) => {
     const inner = createOneMail(mail.mailAddr, []);
