@@ -46,16 +46,20 @@ function createOneMail(mail: string, boxes: string[]) {
   const mailAddr = document.createElement('div');
   mailAddr.className = 'mail-addr';
   mailAddr.id = mail;
+  mailAddr.setAttribute('open', 'false');
   const img = document.createElement('img');
   img.src = '../../static/off.svg';
   const span = document.createElement('span');
   span.innerText = mail;
   mailAddr.appendChild(img);
   mailAddr.appendChild(span);
-
+  oneMail.appendChild(mailAddr);
+  const mailBoxes = createMailBoxes(boxes);
+  mailBoxes.style.display = 'none';
+  oneMail.appendChild(mailBoxes);
   mailAddr.addEventListener('click', () => {
-    if (selectedMail === mail) {
-    } else {
+    // select for delete
+    if (selectedMail !== mail) {
       if (selectedMail) {
         const lastMail = document.getElementById(selectedMail as string)!;
         lastMail.style.backgroundColor = 'transparent';
@@ -63,10 +67,18 @@ function createOneMail(mail: string, boxes: string[]) {
       selectedMail = mail;
       mailAddr.style.backgroundColor = '#e0e5ff';
     }
+    // open or close
+    if (mailAddr.getAttribute('open') === 'false') {
+      mailAddr.setAttribute('open', 'true');
+      img.style.transform = 'rotate(90deg)';
+      mailBoxes.style.display = 'flex';
+    } else {
+      mailAddr.setAttribute('open', 'false');
+      img.style.transform = 'rotate(0deg)';
+      mailBoxes.style.display = 'none';
+    }
   });
 
-  oneMail.appendChild(mailAddr);
-  oneMail.appendChild(createMailBoxes(boxes));
   return oneMail;
 }
 
@@ -201,9 +213,10 @@ document.getElementById('how-to-add')?.addEventListener('click', () => {
 // when mails update, update the left bar
 const leftBar = document.getElementById('left-bar');
 window.mail.onMailsUpdate((mails: []) => {
+  console.log(mails);
   if (leftBar) leftBar.innerHTML = '';
-  mails.forEach((mail: { mailAddr: string }) => {
-    const inner = createOneMail(mail.mailAddr, []);
+  mails.forEach((mail: { mailAddr: string; boxes: string[] }) => {
+    const inner = createOneMail(mail.mailAddr, mail.boxes);
     leftBar?.appendChild(inner);
   });
 });

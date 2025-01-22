@@ -9,6 +9,7 @@ import {
 } from '../mail/mailManager';
 import { mainWindow } from './ui';
 import { shell } from 'electron';
+import { ListResponse } from 'imapflow';
 
 /**
  * Handle IPC messages
@@ -43,10 +44,24 @@ export function handleIPC(): void {
  * send message to renderer, **you need to use this method whenever you change mails list**
  */
 export function updateMailsToRenderer(): void {
-  const info = getMails().map((mail: Mail) => {
+  const info = getMails().map(async (mail: Mail) => {
+    const boxes: string[] = [];
+    await mail.client
+      ?.getBoxes()
+      .then((item: ListResponse[]) => {
+        item?.forEach((box: ListResponse) => {
+          boxes.push(box.name);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return {
       mailAddr: mail.mailAddr,
+      boxes,
     };
   });
-  mainWindow?.webContents.send('update-mails', info);
+  Promise.all(info).then((info) => {
+    mainWindow?.webContents.send('update-mails', info);
+  });
 }

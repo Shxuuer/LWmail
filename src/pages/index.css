@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 .main {
   height: 100%;
@@ -69,7 +70,7 @@
 .mail-addr {
   width: 100%;
   font-size: 1em;
-  padding: 5px 10px;
+  padding: 5px;
   cursor: pointer;
   transition: 0.3s all;
 }
@@ -80,6 +81,10 @@
   width: 12px;
   height: 12px;
   display: inline-block;
+  margin-right: 5px;
+  /* 调整旋转中心到中心点 */
+  transform-origin: 50% 50%;
+  transition: 0.3s all;
 }
 .mail-addr span {
   line-height: 12px;
@@ -104,6 +109,7 @@
   cursor: pointer;
   transition: 0.3s all;
   border-radius: 5px;
+  color: #3e3e3e;
 }
 .mail-box-name:hover {
   background-color: #f0f5ff;

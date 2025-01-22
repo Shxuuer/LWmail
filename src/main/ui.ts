@@ -11,7 +11,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-  mainWindow.hide();
+  // mainWindow.hide();
   mainWindow.setMenu(null);
   mainWindow.loadFile('pages/index.html');
   mainWindow.on('close', (event) => {

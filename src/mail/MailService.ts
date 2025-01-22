@@ -50,8 +50,8 @@ class MailService {
     return this.client?.close();
   }
 
-  public async getMailBoxes(): Promise<ListResponse[] | undefined> {
-    return this.client?.list();
+  public async getBoxes(): Promise<ListResponse[]> {
+    return this.client?.list()!;
   }
 
   public async getMailBox(boxName: string) {}
