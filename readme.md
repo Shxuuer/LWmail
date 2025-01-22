@@ -1,5 +1,7 @@
 # LWmail
 
+[简体中文](doc/readme_zh_CN.md)
+
 **Everything is in the initial stage**
 
 **LWmail**: A concise, cross-platform, and integrated email client, which can rescue you from the vast sea of email clients.
