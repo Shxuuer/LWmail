@@ -1,3 +1,6 @@
+let selectedMail: string | boolean = false;
+const openedMail: string[] = [];
+
 /**
  * create a mail box
  * @param boxName box name
@@ -34,6 +37,7 @@ function createMailBoxes(boxes: string[]) {
  * create one mail element
  * @param mail mail address
  * @param boxes mail boxes
+ * @param mailId mail id
  * @returns HTMLElement mail element
  */
 function createOneMail(mail: string, boxes: string[]) {
@@ -41,12 +45,26 @@ function createOneMail(mail: string, boxes: string[]) {
   oneMail.className = 'one-mail';
   const mailAddr = document.createElement('div');
   mailAddr.className = 'mail-addr';
+  mailAddr.id = mail;
   const img = document.createElement('img');
   img.src = '../../static/off.svg';
   const span = document.createElement('span');
   span.innerText = mail;
   mailAddr.appendChild(img);
   mailAddr.appendChild(span);
+
+  mailAddr.addEventListener('click', () => {
+    if (selectedMail === mail) {
+    } else {
+      if (selectedMail) {
+        const lastMail = document.getElementById(selectedMail as string)!;
+        lastMail.style.backgroundColor = 'transparent';
+      }
+      selectedMail = mail;
+      mailAddr.style.backgroundColor = '#e0e5ff';
+    }
+  });
+
   oneMail.appendChild(mailAddr);
   oneMail.appendChild(createMailBoxes(boxes));
   return oneMail;
@@ -165,6 +183,14 @@ document.getElementById('add-mail')?.addEventListener('click', () => {
   });
 
   createPop(inputPop);
+});
+
+// del mail: after click, delete the selected mail
+document.getElementById('del-mail')?.addEventListener('click', () => {
+  if (selectedMail) {
+    window.mail.delMail(selectedMail as string);
+    selectedMail = false;
+  }
 });
 
 // open how to add

@@ -3,6 +3,7 @@ import {
   writeMailIntoDisk,
   checkMail,
   addMail,
+  removeMail,
   getMails,
   Mail,
 } from '../mail/mailManager';
@@ -27,6 +28,9 @@ export function handleIPC(): void {
         }
         event.returnValue = err;
       });
+  });
+  ipcMain.on('del-mail', (event, mail) => {
+    removeMail(mail);
   });
   ipcMain.on('open-how-to-add', () => {
     shell.openExternal(

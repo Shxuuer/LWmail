@@ -46,6 +46,10 @@ class MailService {
     return this.client.connect();
   }
 
+  public async close() {
+    return this.client?.close();
+  }
+
   public async getMailBoxes(): Promise<ListResponse[] | undefined> {
     return this.client?.list();
   }

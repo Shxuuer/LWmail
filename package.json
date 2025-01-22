@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "imapflow": "^1.0.174",
-    "node-localstorage": "^3.0.5"
+    "node-localstorage": "^3.0.5",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/imapflow": "^1.0.19",

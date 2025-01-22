@@ -45,14 +45,15 @@ export async function addMail(mail: Mail) {
 
 /**
  * remove a mail from registered mails
- * @param mail Mail mail to be removed
+ * @param mailAddr string mail address to be removed
  */
-export function removeMail(mail: Mail) {
-  const index = mails.indexOf(mail);
+export function removeMail(mailArr: string) {
+  const index = mails.findIndex((mail) => mail.mailAddr === mailArr);
   if (index !== -1) {
+    mails[index].client?.close();
     mails.splice(index, 1);
-    // mail.client?.close();
-    // updateMailsToRenderer();
+    delMailFromDisk(mailArr);
+    updateMailsToRenderer();
   }
 }
 
@@ -92,6 +93,11 @@ export function writeMailIntoDisk(mail: Mail): void {
     path.join(__dirname, '../config/mails', mail.mailAddr),
     buffer,
   );
+}
+
+function delMailFromDisk(mail: string): void {
+  if (!fs.existsSync(path.join(__dirname, '../config/mails', mail))) return;
+  fs.unlinkSync(path.join(__dirname, '../config/mails', mail));
 }
 
 /**
