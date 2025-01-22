@@ -35,7 +35,7 @@ export function handleIPC(): void {
   });
   ipcMain.on('open-how-to-add', () => {
     shell.openExternal(
-      'https://github.com/Shxuuer/LWmail/blob/master/readme.md',
+      'https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md',
     );
   });
 }
