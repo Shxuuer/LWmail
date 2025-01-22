@@ -11,12 +11,14 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+  mainWindow.hide();
   mainWindow.setMenu(null);
   mainWindow.loadFile('pages/index.html');
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  mainWindow.on('close', (event) => {
+    event.preventDefault();
+    mainWindow?.hide();
   });
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 const createTray = () => {

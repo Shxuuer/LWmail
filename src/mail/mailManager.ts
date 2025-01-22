@@ -122,6 +122,9 @@ export async function checkMail(mail: Mail): Promise<boolean> {
  * start mail manager
  */
 export function startMailManager(): void {
+  mails.forEach((mail) => mail.client?.close());
+  mails.splice(0, mails.length);
+
   readMailsFromDisk().forEach((item) => {
     addMail(item);
   });
