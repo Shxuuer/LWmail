@@ -1,5 +1,4 @@
 let selectedMail: string | boolean = false;
-const openedMail: string[] = [];
 
 /**
  * create a mail box
@@ -9,13 +8,18 @@ const openedMail: string[] = [];
 function createMailBox(boxName: string) {
   const mailBox = document.createElement('div');
   mailBox.className = 'mail-box';
-  const mailBoxName = document.createElement('div');
+  const mailBoxName = document.createElement('span');
   mailBoxName.className = 'mail-box-name';
   mailBoxName.innerText = boxName;
-  const mails = document.createElement('div');
-  mails.className = 'mails';
+  mailBoxName.addEventListener('click', () => {
+    const accounts = document.getElementById(
+      'left-bar-accounts',
+    ) as HTMLElement;
+    const mails = document.getElementById('left-bar-mails') as HTMLElement;
+    accounts.style.transform = 'translateX(-100%)';
+    mails.style.transform = 'translateX(-100%)';
+  });
   mailBox.appendChild(mailBoxName);
-  mailBox.appendChild(mails);
   return mailBox;
 }
 
@@ -57,6 +61,7 @@ function createOneMail(mail: string, boxes: string[]) {
   const mailBoxes = createMailBoxes(boxes);
   mailBoxes.style.display = 'none';
   oneMail.appendChild(mailBoxes);
+
   mailAddr.addEventListener('click', () => {
     // select for delete
     if (selectedMail !== mail) {
@@ -211,7 +216,7 @@ document.getElementById('how-to-add')?.addEventListener('click', () => {
 });
 
 // when mails update, update the left bar
-const leftBar = document.getElementById('left-bar');
+const leftBar = document.getElementById('left-bar-accounts');
 window.mail.onMailsUpdate((mails: []) => {
   console.log(mails);
   if (leftBar) leftBar.innerHTML = '';
@@ -219,4 +224,11 @@ window.mail.onMailsUpdate((mails: []) => {
     const inner = createOneMail(mail.mailAddr, mail.boxes);
     leftBar?.appendChild(inner);
   });
+});
+
+document.getElementById('left-bar-goback')?.addEventListener('click', () => {
+  const accounts = document.getElementById('left-bar-accounts') as HTMLElement;
+  const mails = document.getElementById('left-bar-mails') as HTMLElement;
+  accounts.style.transform = 'translateX(0)';
+  mails.style.transform = 'translateX(0)';
 });

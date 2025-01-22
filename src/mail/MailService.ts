@@ -51,6 +51,7 @@ class MailService {
   }
 
   public async getBoxes(): Promise<ListResponse[]> {
+    if (!this.client?.authenticated) await this.connect();
     return this.client?.list()!;
   }
 
