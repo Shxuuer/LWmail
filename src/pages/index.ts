@@ -226,9 +226,28 @@ window.mail.onMailsUpdate((mails: []) => {
   });
 });
 
+// go back
 document.getElementById('left-bar-goback')?.addEventListener('click', () => {
   const accounts = document.getElementById('left-bar-accounts') as HTMLElement;
   const mails = document.getElementById('left-bar-mails') as HTMLElement;
   accounts.style.transform = 'translateX(0)';
   mails.style.transform = 'translateX(0)';
 });
+
+// show time
+const setTime = (function setTime() {
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const week = date.getDay();
+  const weekStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const time = `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  const dateStr = `${month}/${day} ${weekStr[week]}`;
+  document.getElementById('hello-time')!.innerText = time;
+  document.getElementById('hello-date')!.innerText = dateStr;
+  return setTime;
+})();
+setInterval(setTime, 1000);
