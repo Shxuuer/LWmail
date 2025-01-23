@@ -1,21 +1,66 @@
 let selectedMail: string | boolean = false;
+let accounts: { mailAddr: string; boxes: Boxes[] }[] = [];
+let selectedBox: Boxes | undefined;
+let selectedMailInfo: MailInfo | undefined;
+
+/**
+ * create one mail preview
+ * @param mailInfo mail information
+ * @returns HTMLElement mail preview
+ */
+function createOneMailPreview(mailInfo: MailInfo) {
+  const mail = document.createElement('div');
+  mail.className = 'left-bar-mails-content-each';
+  const mailText = document.createElement('div');
+  mailText.className = 'left-bar-mails-content-each-text';
+  const mailTextFrom = document.createElement('div');
+  mailTextFrom.className = 'left-bar-mails-content-each-text-from';
+  mailTextFrom.innerText = mailInfo.from.name;
+  const mailTextTitle = document.createElement('div');
+  mailTextTitle.className = 'left-bar-mails-content-each-text-title';
+  mailTextTitle.innerText = mailInfo.subject;
+  const mailTextTime = document.createElement('div');
+  mailTextTime.className = 'left-bar-mails-content-each-text-time';
+  const edate = new Date(mailInfo.date);
+  const week = edate.getDay();
+  const weekStr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const month = edate.getMonth() + 1;
+  const day = edate.getDate();
+  mailTextTime.innerText = `${weekStr[week]} ${month}/${day}`;
+  mailText.appendChild(mailTextFrom);
+  mailText.appendChild(mailTextTitle);
+  mailText.appendChild(mailTextTime);
+  mail.appendChild(mailText);
+  return mail;
+}
 
 /**
  * create a mail box
- * @param boxName box name
+ * @param box box name
+ * @param accountIndex account index
+ * @param boxIndex box index
  * @returns HTMLElement mail box
  */
-function createMailBox(boxName: string) {
+function createMailBox(box: Boxes) {
   const mailBox = document.createElement('div');
   mailBox.className = 'mail-box';
   const mailBoxName = document.createElement('span');
   mailBoxName.className = 'mail-box-name';
-  mailBoxName.innerText = boxName;
+  mailBoxName.innerText = box.boxName;
   mailBoxName.addEventListener('click', () => {
+    selectedBox = box;
     const accounts = document.getElementById(
       'left-bar-accounts',
     ) as HTMLElement;
     const mails = document.getElementById('left-bar-mails') as HTMLElement;
+    const mailList = document.getElementById(
+      'left-bar-mails-content',
+    ) as HTMLElement;
+    mailList.innerHTML = '';
+    box.messages.forEach((mailInfo) => {
+      const mail = createOneMailPreview(mailInfo);
+      mailList.appendChild(mail);
+    });
     accounts.style.transform = 'translateX(-100%)';
     mails.style.transform = 'translateX(-100%)';
   });
@@ -26,13 +71,14 @@ function createMailBox(boxName: string) {
 /**
  * create mail boxes
  * @param boxes box names
+ * @param accountIndex account index
  * @returns HTMLElement mail boxes
  */
-function createMailBoxes(boxes: string[]) {
+function createMailBoxes(boxes: Boxes[]) {
   const mailBoxes = document.createElement('div');
   mailBoxes.className = 'mail-boxes';
-  boxes.forEach((boxName) => {
-    mailBoxes.appendChild(createMailBox(boxName));
+  boxes.forEach((box) => {
+    mailBoxes.appendChild(createMailBox(box));
   });
   return mailBoxes;
 }
@@ -41,10 +87,10 @@ function createMailBoxes(boxes: string[]) {
  * create one mail element
  * @param mail mail address
  * @param boxes mail boxes
- * @param mailId mail id
+ * @param accountIndex account index
  * @returns HTMLElement mail element
  */
-function createOneMail(mail: string, boxes: string[]) {
+function createOneMail(mail: string, boxes: Boxes[]) {
   const oneMail = document.createElement('div');
   oneMail.className = 'one-mail';
   const mailAddr = document.createElement('div');
@@ -217,10 +263,11 @@ document.getElementById('how-to-add')?.addEventListener('click', () => {
 
 // when mails update, update the left bar
 const leftBar = document.getElementById('left-bar-accounts');
-window.mail.onMailsUpdate((mails: []) => {
+window.mail.onMailsUpdate((mails: { mailAddr: string; boxes: Boxes[] }[]) => {
   console.log(mails);
+  accounts = mails;
   if (leftBar) leftBar.innerHTML = '';
-  mails.forEach((mail: { mailAddr: string; boxes: string[] }) => {
+  mails.forEach((mail: { mailAddr: string; boxes: Boxes[] }) => {
     const inner = createOneMail(mail.mailAddr, mail.boxes);
     leftBar?.appendChild(inner);
   });

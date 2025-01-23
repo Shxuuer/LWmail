@@ -85,7 +85,7 @@ img {
   border-top: 1px solid #3e3e3e;
   border-collapse: collapse;
   cursor: pointer;
-  padding: 5px 3px;
+  padding: 5px 10px;
   width: 100%;
   background-color: rgba(224, 229, 255, 0.5);
 }
@@ -104,32 +104,25 @@ img {
   white-space: nowrap;
 }
 .left-bar-mails-content-each-text-title {
+  width: 100%;
   color: #0f0f0f;
   display: flex;
   flex-direction: row;
-  height: 1em;
+  height: 1.2em;
   font-size: 0.95em;
-  line-height: 1em;
+  line-height: 1.2em;
   word-break: break-all;
-}
-.left-bar-mails-content-each-text-title-titl {
-  color: #0f0f0f;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
-.left-bar-mails-content-each-text-title-time {
-  color: #0f0f0f;
-  white-space: nowrap;
-  width: fit-content;
-}
-.left-bar-mails-content-each-text-desc {
+.left-bar-mails-content-each-text-time {
+  font-size: 0.9em;
   color: #3e3e3e;
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-all;
   white-space: nowrap;
-  font-size: 0.9em;
 }
 .container {
   width: 100vw;

@@ -52,10 +52,22 @@ class MailService {
 
   public async getBoxes(): Promise<ListResponse[]> {
     if (!this.client?.authenticated) await this.connect();
-    return this.client?.list()!;
+    const boxes = await this.client?.list()!;
+    return boxes;
   }
 
-  public async getMailBox(boxName: string) {}
+  public async getMails(box: string): Promise<any> {
+    if (!this.client?.authenticated) await this.connect();
+    let mailbox = await this.client?.mailboxOpen('INBOX');
+    const msgs: any[] = [];
+    for await (let msg of this.client?.fetch('1:*', {
+      source: true,
+      envelope: true,
+    })!) {
+      msgs.push(msg);
+    }
+    return msgs;
+  }
 }
 
 export { MailService };

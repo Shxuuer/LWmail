@@ -18,7 +18,7 @@ const createWindow = () => {
     event.preventDefault();
     mainWindow?.hide();
   });
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 const createTray = () => {

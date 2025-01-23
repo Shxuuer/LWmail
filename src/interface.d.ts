@@ -10,3 +10,20 @@ declare global {
     mail: mail;
   }
 }
+
+declare global {
+  interface MailInfo {
+    subject: string;
+    date: Date;
+    from: { name: string; address: string };
+    to: { name: string; address: string };
+    source: Buffer;
+  }
+}
+
+declare global {
+  interface Boxes {
+    boxName: string;
+    messages: MailInfo[];
+  }
+}
