@@ -59,7 +59,7 @@ export function updateMailsToRenderer(): void {
               date: msg.envelope.date,
               from: msg.envelope.from[0],
               to: msg.envelope.to[0],
-              source: msg.source,
+              source: msg.source.html,
             };
           },
         ) as MailInfo[],

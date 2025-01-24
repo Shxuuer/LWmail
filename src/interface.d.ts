@@ -17,7 +17,7 @@ declare global {
     date: Date;
     from: { name: string; address: string };
     to: { name: string; address: string };
-    source: Buffer;
+    source: string;
   }
 }
 

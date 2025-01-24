@@ -1,4 +1,5 @@
 import { ImapFlow, ListResponse } from 'imapflow';
+import { simpleParser } from 'mailparser';
 
 class MailService {
   private host: string;
@@ -58,15 +59,17 @@ class MailService {
 
   public async getMails(box: string): Promise<any> {
     if (!this.client?.authenticated) await this.connect();
-    let mailbox = await this.client?.mailboxOpen('INBOX');
+    let lock = await this.client?.getMailboxLock('INBOX');
     const msgs: any[] = [];
     for await (let msg of this.client?.fetch('1:*', {
       source: true,
       envelope: true,
     })!) {
-      msgs.push(msg);
+      const parsed = await simpleParser(msg.source);
+      msgs.push({ source: parsed, envelope: msg.envelope });
     }
-    return msgs;
+    lock?.release();
+    return msgs.reverse();
   }
 }
 

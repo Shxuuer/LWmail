@@ -31,6 +31,11 @@ function createOneMailPreview(mailInfo: MailInfo) {
   mailText.appendChild(mailTextTitle);
   mailText.appendChild(mailTextTime);
   mail.appendChild(mailText);
+  mail.addEventListener('click', () => {
+    const mailDetail = document.getElementById('mail-detail') as HTMLElement;
+    mailDetail.style.display = 'block';
+    mailDetail.innerHTML = mailInfo.source;
+  });
   return mail;
 }
 

@@ -8,6 +8,7 @@ const createWindow = () => {
     width: 1000,
     height: 700,
     webPreferences: {
+      devTools: true,
       preload: path.join(__dirname, 'preload.js'),
     },
   });
@@ -18,7 +19,7 @@ const createWindow = () => {
     event.preventDefault();
     mainWindow?.hide();
   });
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools({ mode: 'right' });
 };
 
 const createTray = () => {
