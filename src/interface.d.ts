@@ -27,3 +27,14 @@ declare global {
     messages: MailInfo[];
   }
 }
+
+declare global {
+  module "*.svg";
+  module "*.png";
+  module "*.png";
+  module "*.jpg";
+  module "*.jpeg";
+  module "*.gif";
+  module "*.bmp";
+  module "*.tiff";
+}

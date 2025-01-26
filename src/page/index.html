@@ -3,42 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <title>LWmail</title>
-    <link rel="stylesheet" href="./index.css" />
-
-    <style type="text/css"></style>
   </head>
   <body style="position: relative">
-    <div class="container">
-      <div class="header">
-        <div class="header-btn" id="add-mail">
-          <img
-            src="../../static/add.svg"
-            alt="add-mail"
-            title="add a new email"
-          />
-        </div>
-        <div class="header-btn" id="del-mail">
-          <img
-            src="../../static/del.svg"
-            alt="del-mail"
-            title="delete selected email"
-          />
-        </div>
-        <div class="header-btn" id="how-to-add">
-          <img
-            src="../../static/question.svg"
-            alt="how-to-add"
-            title="how to add a email"
-          />
-        </div>
-      </div>
+    <div id="container">
+      <div id="header"></div>
       <div class="main">
         <div id="left-bar">
           <div id="left-bar-accounts" class="left-bar-item"></div>
           <div id="left-bar-mails" class="left-bar-item">
             <div id="left-bar-goback">
               <img
-                src="../../static/off.svg"
+                src="../assets/img/off.svg"
                 alt="goback"
                 title="go back to accounts"
               />
@@ -56,5 +31,4 @@
       </div>
     </div>
   </body>
-  <script src="./index.js" type="module"></script>
 </html>
