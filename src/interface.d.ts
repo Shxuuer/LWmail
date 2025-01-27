@@ -12,19 +12,25 @@ declare global {
 }
 
 declare global {
-  interface MailInfo {
+  interface Message {
     subject: string;
     date: Date;
     from: { name: string; address: string };
     to: { name: string; address: string };
     source: string;
   }
-}
-
-declare global {
-  interface Boxes {
+  interface Box {
     boxName: string;
-    messages: MailInfo[];
+    messages: Message[];
+  }
+  interface Account {
+    imap: string;
+    imapPort: string;
+    smtp: string;
+    smtpPort: string;
+    mailAddr: string;
+    password: string;
+    accessToken?: string;
   }
 }
 

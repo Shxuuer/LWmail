@@ -11,5 +11,6 @@ export const plugins = [
   new webpack.ExternalsPlugin("commonjs", [
     "safe-stable-stringify",
     "domutils",
+    "jsdom",
   ]),
 ];

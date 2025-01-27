@@ -13,8 +13,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "dompurify": "^3.2.3",
-    "imapflow": "1.0.152",
+    "imapflow": "1.0.178",
+    "isomorphic-dompurify": "^2.20.0",
     "mailparser": "^3.7.2"
   },
   "devDependencies": {

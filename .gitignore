@@ -137,4 +137,5 @@ dist
 
 *.exe
 .npmrc
-.webpack
+.webpack/
+config/
