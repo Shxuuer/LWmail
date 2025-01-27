@@ -107,7 +107,7 @@ function createOneMail(mail: string, boxes: Boxes[]) {
   mailAddr.id = mail;
   mailAddr.setAttribute("open", "false");
   const img = document.createElement("img");
-  img.src = "../../static/off.svg";
+  img.src = require("../assets/img/off.svg");
   const span = document.createElement("span");
   span.innerText = mail;
   mailAddr.appendChild(img);

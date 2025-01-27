@@ -1,8 +1,8 @@
-import { MailService } from '../mail/MailService';
-import { updateMailsToRenderer } from '../main/ipc';
-import * as path from 'path';
-import fs from 'fs';
-import { safeStorage } from 'electron';
+import { MailService } from "../mail/MailService";
+import { updateMailsToRenderer } from "../main/ipc";
+import * as path from "path";
+import fs from "fs";
+import { safeStorage } from "electron";
 
 export interface Mail {
   imap: string;
@@ -16,6 +16,7 @@ export interface Mail {
 }
 
 const mails: Mail[] = [];
+const configPath = path.join(__dirname, "../config/mails");
 
 /**
  * get registered mails list
@@ -62,7 +63,7 @@ export function removeMail(mailArr: string) {
  * @returns string[] mail list
  */
 function readMailListFromDisk(): string[] {
-  return fs.readdirSync(path.join(__dirname, '../config/mails'));
+  return fs.readdirSync(configPath);
 }
 
 /**
@@ -74,8 +75,8 @@ function readMailsFromDisk(): Mail[] {
   return list.map((mailAddr) => {
     return JSON.parse(
       safeStorage.decryptString(
-        fs.readFileSync(path.join(__dirname, '../config/mails', mailAddr)),
-      ),
+        fs.readFileSync(path.join(configPath, mailAddr))
+      )
     );
   });
 }
@@ -86,18 +87,13 @@ function readMailsFromDisk(): Mail[] {
  */
 export function writeMailIntoDisk(mail: Mail): void {
   let buffer: Buffer = safeStorage.encryptString(JSON.stringify(mail));
-  if (!fs.existsSync(path.join(__dirname, '../config/mails'))) {
-    fs.mkdirSync(path.join(__dirname, '../config/mails'));
-  }
-  fs.writeFileSync(
-    path.join(__dirname, '../config/mails', mail.mailAddr),
-    buffer,
-  );
+  if (!fs.existsSync(configPath)) fs.mkdirSync(configPath, { recursive: true });
+  fs.writeFileSync(path.join(configPath, mail.mailAddr), buffer);
 }
 
 function delMailFromDisk(mail: string): void {
-  if (!fs.existsSync(path.join(__dirname, '../config/mails', mail))) return;
-  fs.unlinkSync(path.join(__dirname, '../config/mails', mail));
+  if (!fs.existsSync(path.join(configPath, mail))) return;
+  fs.unlinkSync(path.join(configPath, mail));
 }
 
 /**
@@ -122,6 +118,8 @@ export async function checkMail(mail: Mail): Promise<boolean> {
  * start mail manager
  */
 export function startMailManager(): void {
+  if (!fs.existsSync(configPath)) fs.mkdirSync(configPath, { recursive: true });
+
   mails.forEach((mail) => mail.client?.close());
   mails.splice(0, mails.length);
 

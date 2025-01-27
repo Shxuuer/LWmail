@@ -1,4 +1,5 @@
-import { ipcMain } from 'electron';
+import { ipcMain } from "electron";
+import { shell } from "electron";
 import {
   writeMailIntoDisk,
   checkMail,
@@ -6,15 +7,14 @@ import {
   removeMail,
   getMails,
   Mail,
-} from '../mail/mailManager';
-import { mainWindow } from './ui';
-import { shell } from 'electron';
+} from "../mail/mailManager";
+import { mainWindow } from "./ui";
 
 /**
  * Handle IPC messages
  */
 export function handleIPC(): void {
-  ipcMain.on('add-new-mail', async (event, mail) => {
+  ipcMain.on("add-new-mail", async (event, mail) => {
     await checkMail(mail)
       .then((res) => {
         writeMailIntoDisk(mail);
@@ -24,17 +24,17 @@ export function handleIPC(): void {
       .catch((err) => {
         console.log(err);
         if (err.response) {
-          err = 'from server: ' + err.response;
+          err = "from server: " + err.response;
         }
         event.returnValue = err;
       });
   });
-  ipcMain.on('del-mail', (event, mail) => {
+  ipcMain.on("del-mail", (event, mail) => {
     removeMail(mail);
   });
-  ipcMain.on('open-how-to-add', () => {
+  ipcMain.on("open-how-to-add", () => {
     shell.openExternal(
-      'https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md',
+      "https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md"
     );
   });
 }
@@ -61,7 +61,7 @@ export function updateMailsToRenderer(): void {
               to: msg.envelope.to[0],
               source: msg.source.html,
             };
-          },
+          }
         ) as MailInfo[],
       };
     })!;
@@ -71,6 +71,6 @@ export function updateMailsToRenderer(): void {
     };
   });
   Promise.all(info).then((info) => {
-    mainWindow?.webContents.send('update-mails', info);
+    mainWindow?.webContents.send("update-mails", info);
   });
 }
