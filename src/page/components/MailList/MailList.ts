@@ -55,11 +55,11 @@ function createMailBox(box: Box) {
   mailBoxName.innerText = box.boxName;
   mailBoxName.addEventListener("click", () => {
     const accounts = document.getElementById(
-      "left-bar-accounts"
+      "left-bar-accounts",
     ) as HTMLElement;
     const mails = document.getElementById("left-bar-mails") as HTMLElement;
     const mailList = document.getElementById(
-      "left-bar-mails-content"
+      "left-bar-mails-content",
     ) as HTMLElement;
     mailList.innerHTML = "";
     box.messages.forEach((mailInfo) => {

@@ -4,7 +4,7 @@ export function createHeaderButton(
   imgSrc: string,
   alt: string,
   title: string,
-  onClick: (this: GlobalEventHandlers, ev: MouseEvent) => any
+  onClick: (this: GlobalEventHandlers, ev: MouseEvent) => any,
 ) {
   const button = document.createElement("div");
   button.classList.add("header-btn");

@@ -55,7 +55,7 @@ export class AccountManager {
   public async registAccount(account: Account): Promise<MailService> {
     return new Promise((resolve, reject) => {
       const index = this.accounts.findIndex(
-        (acc) => acc.mailAddr === account.mailAddr
+        (acc) => acc.mailAddr === account.mailAddr,
       );
       if (index !== -1) return;
       const client = new MailService(account);
@@ -79,7 +79,7 @@ export class AccountManager {
    */
   public unregistAccount(accountAddr: string): void {
     const index = this.accounts.findIndex(
-      (account) => account.mailAddr === accountAddr
+      (account) => account.mailAddr === accountAddr,
     );
     if (index === -1) return;
     this.accounts.splice(index, 1);

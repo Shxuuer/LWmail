@@ -75,7 +75,7 @@ class MailService {
    */
   public async getBoxMailUID(
     boxPath: string,
-    quantity: number
+    quantity: number,
   ): Promise<FetchMessageObject[]> {
     if (!this.client?.authenticated) await this.connect();
     let lock = await this.client?.getMailboxLock(boxPath);
@@ -92,7 +92,7 @@ class MailService {
    */
   public async getBoxMailEnvelope(
     boxPath: string,
-    quantity: number
+    quantity: number,
   ): Promise<FetchMessageObject[]> {
     if (!this.client?.authenticated) await this.connect();
     let lock = await this.client?.getMailboxLock(boxPath);

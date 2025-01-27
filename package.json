@@ -1,6 +1,6 @@
 {
   "name": "lwmail",
-  "version": "1.0.0",
+  "version": "0.2.3",
   "main": ".webpack/main",
   "author": "",
   "scripts": {
@@ -8,7 +8,10 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "ts:check": "tsc --noEmit"
   },
   "license": "ISC",
   "description": "",
