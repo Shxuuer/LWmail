@@ -7,14 +7,14 @@ import { mainWindow } from "./ui";
  */
 export function handleIPC(accountManager: AccountManager): void {
   ipcMain.on("add-account", (event, account) =>
-    addAccount(event, account, accountManager)
+    addAccount(event, account, accountManager),
   );
   ipcMain.on("del-account", (event, accountAddr) =>
-    delAccount(event, accountAddr, accountManager)
+    delAccount(event, accountAddr, accountManager),
   );
   ipcMain.on("open-how-to-add", openHowToAdd);
   ipcMain.on("get-html-by-uid", (event, accountAddr, boxPath, uid) =>
-    getHtmlByUid(event, accountAddr, boxPath, uid, accountManager)
+    getHtmlByUid(event, accountAddr, boxPath, uid, accountManager),
   );
 }
 
@@ -27,7 +27,7 @@ export function handleIPC(accountManager: AccountManager): void {
 async function addAccount(
   event: IpcMainEvent,
   account: Account,
-  accountManager: AccountManager
+  accountManager: AccountManager,
 ): Promise<void> {
   accountManager
     .checkAccount(account)
@@ -51,7 +51,7 @@ async function addAccount(
 async function delAccount(
   event: IpcMainEvent,
   accountAddr: string,
-  accountManager: AccountManager
+  accountManager: AccountManager,
 ): Promise<void> {
   accountManager.unregistAccount(accountAddr);
   accountManager.delAccountFromDatabase(accountAddr);
@@ -70,7 +70,7 @@ async function getHtmlByUid(
   accountAddr: string,
   boxPath: string,
   uid: string,
-  accountManager: AccountManager
+  accountManager: AccountManager,
 ) {
   const html = await accountManager.getMailHTML(accountAddr, boxPath, uid);
   event.returnValue = html;

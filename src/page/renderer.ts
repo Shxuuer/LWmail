@@ -51,7 +51,7 @@ function addMail() {
 
   function setErrorMessage(msg: string, color?: string) {
     let error: HTMLElement | null = document.getElementsByClassName(
-      "input-pop-error"
+      "input-pop-error",
     )[0] as HTMLElement;
     if (!error) {
       error = document.createElement("div");
@@ -146,8 +146,8 @@ header?.appendChild(
     require("../assets/img/add.svg"),
     "add-mail",
     "add a new email account",
-    addMail
-  )
+    addMail,
+  ),
 );
 header?.appendChild(
   createHeaderButton(
@@ -159,8 +159,8 @@ header?.appendChild(
         window.mail.delAccount(selectedMail as string);
         setSelectMail(false);
       }
-    }
-  )
+    },
+  ),
 );
 header?.appendChild(
   createHeaderButton(
@@ -169,6 +169,6 @@ header?.appendChild(
     "how to add a email account",
     () => {
       window.mail.openHowToAdd();
-    }
-  )
+    },
+  ),
 );

@@ -82,13 +82,13 @@ class MailService {
    */
   public async getBoxMailUID(
     boxPath: string,
-    quantity: number | string
+    quantity: number | string,
   ): Promise<string[]> {
     if (!this.client?.authenticated) await this.connect();
     let lock = await this.client?.getMailboxLock(boxPath);
     const ids: FetchMessageObject[] = await this.client?.fetchAll(
       `1:${quantity}`,
-      { uid: true }
+      { uid: true },
     );
     lock?.release();
     const uid: string[] = ids.map((id) => id.uid.toString());
@@ -103,7 +103,7 @@ class MailService {
    */
   public async getBoxMailEnvelopes(
     boxPath: string,
-    quantity: number | string
+    quantity: number | string,
   ): Promise<FetchMessageObject[]> {
     if (!this.client?.authenticated) await this.connect();
     let lock = await this.client?.getMailboxLock(boxPath);
@@ -122,14 +122,14 @@ class MailService {
    */
   public async getMailEnvelops(
     boxPath: string,
-    uid: number | string
+    uid: number | string,
   ): Promise<FetchMessageObject> {
     if (!this.client?.authenticated) await this.connect();
     let lock = await this.client?.getMailboxLock(boxPath);
     const envelope = await this?.client.fetchOne(
       `${uid}`,
       { envelope: true },
-      { uid: true }
+      { uid: true },
     );
     lock?.release();
     return envelope;
@@ -143,7 +143,7 @@ class MailService {
    */
   public async getMailHTML(
     boxPath: string,
-    uid: number | string
+    uid: number | string,
   ): Promise<string> {
     // if cached, return source
     let caches = this.boxCache.find((box) => box.boxPath === boxPath);
@@ -229,14 +229,14 @@ class MailService {
       const boxesPath = await this.getBoxesPath();
       // add box to cache
       this.boxCache.push(
-        ...boxesPath.map((boxPath) => ({ boxPath, messages: [] as Message[] }))
+        ...boxesPath.map((boxPath) => ({ boxPath, messages: [] as Message[] })),
       );
       // get all mails from boxes
       const boxPromise: Promise<void>[] = boxesPath.map(async (boxPath) => {
         let caches = this.boxCache.find((box) => box.boxPath === boxPath);
         const envelopes = await this.getBoxMailEnvelopes(boxPath, "*");
         caches.messages = envelopes.map((envelope) =>
-          MailService.FetchMessage2Message(envelope)
+          MailService.FetchMessage2Message(envelope),
         );
       });
       await Promise.all(boxPromise);
