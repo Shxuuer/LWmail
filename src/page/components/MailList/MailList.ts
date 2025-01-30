@@ -35,6 +35,9 @@ function createOneMailPreview(mailInfo: Message) {
   mail.addEventListener("click", () => {
     const mailDetail = document.getElementById("mail-detail") as HTMLElement;
     mailDetail.style.display = "block";
+    if (mailInfo.source === undefined) {
+      window.mail.getHtmlByUid(mailInfo.to.address, "INBOX", mailInfo.uid);
+    }
     mailDetail.innerHTML = mailInfo.source;
   });
   return mail;
@@ -52,14 +55,14 @@ function createMailBox(box: Box) {
   mailBox.className = "mail-box";
   const mailBoxName = document.createElement("span");
   mailBoxName.className = "mail-box-name";
-  mailBoxName.innerText = box.boxName;
+  mailBoxName.innerText = box.boxPath;
   mailBoxName.addEventListener("click", () => {
     const accounts = document.getElementById(
-      "left-bar-accounts",
+      "left-bar-accounts"
     ) as HTMLElement;
     const mails = document.getElementById("left-bar-mails") as HTMLElement;
     const mailList = document.getElementById(
-      "left-bar-mails-content",
+      "left-bar-mails-content"
     ) as HTMLElement;
     mailList.innerHTML = "";
     box.messages.forEach((mailInfo) => {
@@ -102,7 +105,7 @@ export function createOneAccount(mail: string, boxes: Box[]) {
   mailAddr.id = mail;
   mailAddr.setAttribute("open", "false");
   const img = document.createElement("img");
-  img.src = require("../../../assets/img/close.svg");
+  img.src = require("../../../assets/img/off.svg");
   const span = document.createElement("span");
   span.innerText = mail;
   mailAddr.appendChild(img);

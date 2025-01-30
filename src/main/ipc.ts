@@ -1,5 +1,4 @@
-import { ipcMain } from "electron";
-import { shell } from "electron";
+import { ipcMain, shell, IpcMainEvent } from "electron";
 import { AccountManager } from "../mail/AccountManager";
 import { mainWindow } from "./ui";
 
@@ -7,63 +6,88 @@ import { mainWindow } from "./ui";
  * Handle IPC messages
  */
 export function handleIPC(accountManager: AccountManager): void {
-  ipcMain.on("add-new-mail", async (event, mail) => {
-    // await checkMail(mail)
-    //   .then((res) => {
-    //     writeMailIntoDisk(mail);
-    //     addMail(mail);
-    //     event.returnValue = res;
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     if (err.response) {
-    //       err = "from server: " + err.response;
-    //     }
-    //     event.returnValue = err;
-    //   });
-  });
-  ipcMain.on("del-mail", (event, mail) => {
-    // removeMail(mail);
-  });
-  ipcMain.on("open-how-to-add", () => {
-    shell.openExternal(
-      "https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md",
-    );
-  });
+  ipcMain.on("add-account", (event, account) =>
+    addAccount(event, account, accountManager)
+  );
+  ipcMain.on("del-account", (event, accountAddr) =>
+    delAccount(event, accountAddr, accountManager)
+  );
+  ipcMain.on("open-how-to-add", openHowToAdd);
+  ipcMain.on("get-html-by-uid", (event, accountAddr, boxPath, uid) =>
+    getHtmlByUid(event, accountAddr, boxPath, uid, accountManager)
+  );
+}
+
+/**
+ * add new account to database and service
+ * @param event IpcMainEvent event
+ * @param account type Account
+ * @param accountManager accountManager given by handleIPC
+ */
+async function addAccount(
+  event: IpcMainEvent,
+  account: Account,
+  accountManager: AccountManager
+): Promise<void> {
+  accountManager
+    .checkAccount(account)
+    .then((res) => {
+      accountManager.addAccountToDatabase(account);
+      accountManager.registAccount(account);
+      event.returnValue = res;
+    })
+    .catch((err) => {
+      if (err.response) err = "from server: " + err.response;
+      event.returnValue = err;
+    });
+}
+
+/**
+ * remove account from database and service
+ * @param event IpcMainEvent event
+ * @param accountAddr address of account you want to remove
+ * @param accountManager accountManager given by handleIPC
+ */
+async function delAccount(
+  event: IpcMainEvent,
+  accountAddr: string,
+  accountManager: AccountManager
+): Promise<void> {
+  accountManager.unregistAccount(accountAddr);
+  accountManager.delAccountFromDatabase(accountAddr);
+}
+
+/**
+ * get mail's html source by account address, box path and uid of mail
+ * @param event IpcMainEvent event
+ * @param accountAddr address of account
+ * @param boxPath box path of mail
+ * @param uid uid of mail
+ * @param accountManager accountManager given by handleIPC
+ */
+async function getHtmlByUid(
+  event: IpcMainEvent,
+  accountAddr: string,
+  boxPath: string,
+  uid: string,
+  accountManager: AccountManager
+) {
+  const html = await accountManager.getMailHTML(accountAddr, boxPath, uid);
+  event.returnValue = html;
+}
+
+/**
+ * open browser directed to github page, show how to add a new account
+ */
+function openHowToAdd(): void {
+  const url: string =
+    "https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md";
+  shell.openExternal(url);
 }
 
 /**
  * send message to renderer, **you need to use this method whenever you change mails list**
  */
-export function updateMailsToRenderer(): void {
-  // const info = getMails().map(async (mail: Account) => {
-  //   const boxList = await mail.client?.getBoxes();
-  //   const boxes: Promise<Box>[] = boxList?.map(async (box) => {
-  //     const messages = await mail.client?.getMails(box.path);
-  //     return {
-  //       boxName: box.name,
-  //       messages: messages?.map(
-  //         (msg: {
-  //           envelope: { subject: any; date: any; from: any[]; to: any[] };
-  //           source: any;
-  //         }) => {
-  //           return {
-  //             subject: msg.envelope.subject,
-  //             date: msg.envelope.date,
-  //             from: msg.envelope.from[0],
-  //             to: msg.envelope.to[0],
-  //             source: msg.source.html,
-  //           };
-  //         }
-  //       ) as Message[],
-  //     };
-  //   })!;
-  //   return {
-  //     mailAddr: mail.mailAddr,
-  //     boxes: await Promise.all(boxes),
-  //   };
-  // });
-  // Promise.all(info).then((info) => {
-  //   mainWindow?.webContents.send("update-mails", info);
-  // });
+export function updateMailsToRenderer(accountManager: AccountManager): void {
+  mainWindow?.webContents.send("update-mails", accountManager.getBoxList());
 }

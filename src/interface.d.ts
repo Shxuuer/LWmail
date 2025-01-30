@@ -1,7 +1,8 @@
 export interface mail {
-  addNewMail: (mail: {}) => boolean;
-  delMail: (mail: string) => boolean;
-  onMailsUpdate: (callback: (mails: []) => void) => void;
+  addAccount: (account: Account) => boolean | string;
+  delAccount: (accountAddr: string) => void;
+  getHtmlByUid: (accountAddr: string, boxPath: string, uid: string) => string;
+  onMailsUpdate: (callback: (accountBox: AccountBox[]) => void) => void;
   openHowToAdd: () => void;
 }
 
@@ -12,18 +13,7 @@ declare global {
 }
 
 declare global {
-  interface Message {
-    subject: string;
-    date: Date;
-    from: { name: string; address: string };
-    to: { name: string; address: string };
-    source: string;
-  }
-  interface Box {
-    boxName: string;
-    messages: Message[];
-  }
-  interface Account {
+  type Account = {
     imap: string;
     imapPort: string;
     smtp: string;
@@ -31,7 +21,23 @@ declare global {
     mailAddr: string;
     password: string;
     accessToken?: string;
-  }
+  };
+  type AccountBox = {
+    accountAddr: string;
+    boxes: Box[];
+  };
+  type Box = {
+    boxPath: string;
+    messages: Message[];
+  };
+  type Message = {
+    subject?: string;
+    date?: Date;
+    from?: { name: string; address: string };
+    to?: { name: string; address: string };
+    source?: string;
+    uid: string;
+  };
 }
 
 declare global {

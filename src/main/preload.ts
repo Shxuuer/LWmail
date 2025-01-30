@@ -2,8 +2,12 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("mail", {
   openHowToAdd: () => ipcRenderer.send("open-how-to-add"),
-  addNewMail: (mail: {}) => ipcRenderer.sendSync("add-new-mail", mail),
-  delMail: (mail: string) => ipcRenderer.send("del-mail", mail),
-  onMailsUpdate: (callback: (mails: []) => void) =>
-    ipcRenderer.on("update-mails", (event, mails) => callback(mails)),
+  addAccount: (account: Account) =>
+    ipcRenderer.sendSync("add-account", account),
+  delAccount: (accountAddr: string) =>
+    ipcRenderer.sendSync("del-account", accountAddr),
+  getHtmlByUid: (accountAddr: string, boxPath: string, uid: string) =>
+    ipcRenderer.sendSync("get-html-by-uid", accountAddr, boxPath, uid),
+  onMailsUpdate: (callback: (accountBox: AccountBox[]) => void) =>
+    ipcRenderer.on("update-mails", (event, accountBox) => callback(accountBox)),
 });

@@ -7,7 +7,6 @@ import {
   removePop,
   setSelectMail,
 } from "./components/MailList/MailList";
-let accounts: { mailAddr: string; boxes: Box[] }[] = [];
 
 // add mail: after click, create a pop to input mail information
 function addMail() {
@@ -52,7 +51,7 @@ function addMail() {
 
   function setErrorMessage(msg: string, color?: string) {
     let error: HTMLElement | null = document.getElementsByClassName(
-      "input-pop-error",
+      "input-pop-error"
     )[0] as HTMLElement;
     if (!error) {
       error = document.createElement("div");
@@ -93,24 +92,22 @@ function addMail() {
       accessToken: (inputs[6] as HTMLInputElement).value,
     };
     setTimeout(() => {
-      const res = window.mail.addNewMail(mail);
+      const res = window.mail.addAccount(mail);
       if (res === true) removePop();
       else if (res === false) setErrorMessage("fail", "red");
       else setErrorMessage(res, "red");
     }, 100);
   });
-
   createPop(inputPop);
 }
 
 // when mails update, update the left bar
 const leftBar = document.getElementById("left-bar-accounts");
-window.mail.onMailsUpdate((mails: { mailAddr: string; boxes: Box[] }[]) => {
-  console.log(mails);
-  accounts = mails;
+window.mail.onMailsUpdate((accountBoxes: AccountBox[]) => {
+  console.log(accountBoxes);
   if (leftBar) leftBar.innerHTML = "";
-  mails.forEach((mail: { mailAddr: string; boxes: Box[] }) => {
-    const inner = createOneAccount(mail.mailAddr, mail.boxes);
+  accountBoxes.forEach((accountBox: AccountBox) => {
+    const inner = createOneAccount(accountBox.accountAddr, accountBox.boxes);
     leftBar?.appendChild(inner);
   });
 });
@@ -149,8 +146,8 @@ header?.appendChild(
     require("../assets/img/add.svg"),
     "add-mail",
     "add a new email account",
-    addMail,
-  ),
+    addMail
+  )
 );
 header?.appendChild(
   createHeaderButton(
@@ -159,11 +156,11 @@ header?.appendChild(
     "delete selected email account",
     () => {
       if (selectedMail) {
-        window.mail.delMail(selectedMail as string);
+        window.mail.delAccount(selectedMail as string);
         setSelectMail(false);
       }
-    },
-  ),
+    }
+  )
 );
 header?.appendChild(
   createHeaderButton(
@@ -172,6 +169,6 @@ header?.appendChild(
     "how to add a email account",
     () => {
       window.mail.openHowToAdd();
-    },
-  ),
+    }
+  )
 );

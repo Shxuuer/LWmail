@@ -1,5 +1,5 @@
 import { app } from "electron";
-// import { createWindow, createTray } from "./main/ui";
+import { createWindow, createTray } from "./main/ui";
 import { handleIPC } from "./main/ipc";
 import { AccountManager } from "./mail/AccountManager";
 
@@ -10,8 +10,8 @@ if (require("electron-squirrel-startup")) {
 }
 
 app.whenReady().then(() => {
-  // createTray();
-  // createWindow();
+  createTray();
+  createWindow();
   const accountManager: AccountManager = new AccountManager();
   handleIPC(accountManager);
 });

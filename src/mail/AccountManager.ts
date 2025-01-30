@@ -15,10 +15,12 @@ export class AccountManager {
     if (!fs.existsSync(this.configPath))
       fs.mkdirSync(this.configPath, { recursive: true });
     // get all accounts from database and regist them
-    this.getAccountsListFromDatabase().forEach((accountAddr) => {
+    this.getAccountsListFromDatabase().forEach(async (accountAddr) => {
       const account: Account = this.getAccountFromDatabase(accountAddr);
-      this.registAccount(account).then((service: MailService) => {});
+      const service: MailService = await this.registAccount(account);
     });
+    // start checking new mails
+    this.checkNewMails();
   }
 
   /**
@@ -27,6 +29,15 @@ export class AccountManager {
    */
   public getAccounts(): MailService[] {
     return this.accounts;
+  }
+
+  public getBoxList(): AccountBox[] {
+    return this.accounts.map((account) => {
+      return {
+        accountAddr: account.mailAddr,
+        boxes: account.getCache(),
+      };
+    });
   }
 
   /**
@@ -42,6 +53,7 @@ export class AccountManager {
           resolve(true);
         })
         .catch((err) => {
+          console.log(err);
           reject(err);
         });
     });
@@ -55,7 +67,7 @@ export class AccountManager {
   public async registAccount(account: Account): Promise<MailService> {
     return new Promise((resolve, reject) => {
       const index = this.accounts.findIndex(
-        (acc) => acc.mailAddr === account.mailAddr,
+        (acc) => acc.mailAddr === account.mailAddr
       );
       if (index !== -1) return;
       const client = new MailService(account);
@@ -63,7 +75,7 @@ export class AccountManager {
         .connect()
         .then(() => {
           this.accounts.push(client);
-          updateMailsToRenderer();
+          updateMailsToRenderer(this);
           resolve(client);
         })
         .catch((err) => {
@@ -79,12 +91,12 @@ export class AccountManager {
    */
   public unregistAccount(accountAddr: string): void {
     const index = this.accounts.findIndex(
-      (account) => account.mailAddr === accountAddr,
+      (account) => account.mailAddr === accountAddr
     );
     if (index === -1) return;
     this.accounts.splice(index, 1);
     this.accounts[index].close();
-    updateMailsToRenderer();
+    updateMailsToRenderer(this);
   }
 
   /**
@@ -123,5 +135,32 @@ export class AccountManager {
     fs.unlinkSync(path.join(this.configPath, accountAddr));
   }
 
-  public checkNewMails(): void {}
+  /**
+   * check new mails
+   */
+  public async checkNewMails(): Promise<void> {
+    setInterval(async () => {
+      console.log(this.accounts.length);
+      this.accounts.forEach(async (service) => {
+        const mails = await service.checkNewMails(["INBOX"]);
+        if (mails.length > 0) updateMailsToRenderer(this);
+      });
+    }, 5000);
+  }
+
+  /**
+   * get mail's html source code
+   * @param mailAddr mail's mail address
+   * @param boxPath mail's box path
+   * @param uid mail's uid
+   * @returns mail's html source code
+   */
+  public async getMailHTML(
+    mailAddr: string,
+    boxPath: string,
+    uid: string
+  ): Promise<string> {
+    const account = this.accounts.find((acc) => acc.mailAddr === mailAddr);
+    return await account.getMailHTML(boxPath, uid);
+  }
 }
