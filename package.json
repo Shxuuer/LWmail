@@ -16,8 +16,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dayjs": "^1.11.13",
     "imapflow": "1.0.178",
     "isomorphic-dompurify": "^2.20.0",
+    "jquery": "^3.7.1",
     "mailparser": "^3.7.2"
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "@electron-forge/shared-types": "^7.6.1",
     "@electron/fuses": "^1.8.0",
     "@types/imapflow": "^1.0.19",
+    "@types/jquery": "^3.5.32",
     "@types/mailparser": "^3.4.5",
     "@types/node": "^22.10.10",
     "@vercel/webpack-asset-relocator-loader": "1.7.3",
@@ -42,6 +45,8 @@
     "node-loader": "^2.1.0",
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
+    "sass": "^1.83.4",
+    "sass-loader": "^16.0.4",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",

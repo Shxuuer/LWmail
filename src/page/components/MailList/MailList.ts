@@ -1,3 +1,7 @@
+import "./MailList.scss";
+import dayjs from "dayjs";
+import $ from "jquery";
+
 export let selectedMail: string | boolean = false;
 
 export function setSelectMail(value: string | boolean) {
@@ -22,12 +26,8 @@ function createOneMailPreview(mailInfo: Message) {
   mailTextTitle.innerText = mailInfo.subject;
   const mailTextTime = document.createElement("div");
   mailTextTime.className = "left-bar-mails-content-each-text-time";
-  const edate = new Date(mailInfo.date);
-  const week = edate.getDay();
-  const weekStr = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const month = edate.getMonth() + 1;
-  const day = edate.getDate();
-  mailTextTime.innerText = `${weekStr[week]} ${month}/${day}`;
+  const edate = dayjs(mailInfo.date);
+  mailTextTime.innerText = edate.format("ddd MM/DD");
   mailText.appendChild(mailTextFrom);
   mailText.appendChild(mailTextTitle);
   mailText.appendChild(mailTextTime);
@@ -139,22 +139,54 @@ export function createOneAccount(mail: string, boxes: Box[]) {
 }
 
 /**
- * create a pop
- * @param inner pop content
+ * create a go back button
  */
-export function createPop(inner: HTMLElement) {
-  const body = document.body;
-  const pop = document.createElement("div");
-  pop.className = "pop";
-  pop.appendChild(inner);
-  body.appendChild(pop);
+function createMailListGoBack() {
+  const leftBarGoBack = document.getElementById("left-bar-goback")!;
+  const img = document.createElement("img");
+  img.src = require("../../../assets/img/off.svg");
+  img.alt = "goback";
+  const span = document.createElement("span");
+  span.innerText = "Go back";
+  leftBarGoBack.appendChild(img);
+  leftBarGoBack.appendChild(span);
+  function goBack() {
+    const accounts = document.getElementById(
+      "left-bar-accounts",
+    ) as HTMLElement;
+    const mails = document.getElementById("left-bar-mails") as HTMLElement;
+    accounts.style.transform = "translateX(0)";
+    mails.style.transform = "translateX(0)";
+  }
+  leftBarGoBack.addEventListener("click", goBack);
 }
 
-/**
- * remove a pop
- */
-export function removePop() {
-  const body = document.body;
-  const pop = document.getElementsByClassName("pop")[0];
-  body.removeChild(pop);
+function createLeftBarFrame() {
+  $("<div>").attr("id", "left-bar-accounts").addClass("left-bar-item");
+  $("<div>").attr("id", "left-bar-mails").addClass("left-bar-item");
+  $("<div>").attr("id", "left-bar-mails-content");
+  $("<div>").attr("id", "left-bar-goback");
+  return $("<div>").attr("id", "left-bar");
+  const leftBarAccounts = document.createElement("div");
+  leftBarAccounts.id = "left-bar-accounts";
+  leftBarAccounts.className = "left-bar-item";
+
+  const leftBarMails = document.createElement("div");
+  leftBarMails.id = "left-bar-mails";
+  leftBarMails.className = "left-bar-item";
+
+  const leftBarMailsContent = document.createElement("div");
+  leftBarMailsContent.id = "left-bar-mails-content";
+
+  const leftBarGoBack = document.createElement("div");
+  leftBarGoBack.id = "left-bar-goback";
+
+  const leftBar = document.getElementById("left-bar")!;
+  leftBar.appendChild(leftBarAccounts);
+  leftBar.appendChild(leftBarMails);
+  createMailListGoBack();
+}
+
+export function createMailList() {
+  return createLeftBarFrame();
 }

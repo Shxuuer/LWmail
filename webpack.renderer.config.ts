@@ -5,7 +5,12 @@ import { plugins } from "./webpack.plugins";
 
 rules.push({
   test: /\.css$/,
-  use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+  use: ["style-loader", "css-loader"],
+});
+
+rules.push({
+  test: /\.scss$/,
+  use: ["style-loader", "css-loader", "sass-loader"],
 });
 
 export const rendererConfig: Configuration = {
