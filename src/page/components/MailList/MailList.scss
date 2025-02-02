@@ -10,146 +10,141 @@
   position: relative;
   overflow: hidden;
   user-select: none;
-}
-#left-bar-mails {
-  left: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.left-bar-item {
-  transition: 0.3s all;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
+  > div {
+    transition: 0.3s all;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  #mails {
+    left: 100%;
+    #goback {
+      border-radius: 3px 3px 0 0;
+      background-color: #e0e5ff;
+      width: 100%;
+      height: 30px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+      img {
+        width: 15px;
+        height: 15px;
+        margin-left: 5px;
+        cursor: pointer;
+        transform-origin: 50% 50%;
+        transform: rotate(180deg);
+      }
+      span {
+        font-size: 1em;
+        margin-left: 10px;
+      }
+    }
+    #content {
+      height: 100%;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      > div {
+        border-bottom: 1px solid #3e3e3e;
+        border-top: 1px solid #3e3e3e;
+        border-collapse: collapse;
+        cursor: pointer;
+        padding: 5px 10px;
+        width: 100%;
+        background-color: rgba(224, 229, 255, 0.5);
+        &:hover {
+          background-color: rgba(224, 229, 255, 0.7);
+        }
+        .text {
+          display: flex;
+          flex-direction: column;
+          .text-from {
+            color: #0f0f0f;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
+            white-space: nowrap;
+          }
+          .text-title {
+            width: 100%;
+            color: #0f0f0f;
+            display: flex;
+            flex-direction: row;
+            height: 1.2em;
+            font-size: 0.95em;
+            line-height: 1.2em;
+            word-break: break-all;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+          .text-time {
+            font-size: 0.9em;
+            color: #3e3e3e;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+  #accounts {
+    > div {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: 0.3s all;
+      .mail-addr {
+        width: 100%;
+        font-size: 1em;
+        padding: 5px;
+        cursor: pointer;
+        transition: 0.3s all;
+        overflow: hidden;
+        &:hover {
+          background-color: #e0e5ff !important;
+        }
+        img {
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          margin-right: 5px;
+          transform-origin: 50% 50%;
+          transition: 0.3s all;
+        }
+        span {
+          line-height: 12px;
+          height: 12px;
+        }
+      }
+      .mail-boxes {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        > div {
+          width: 90%;
+          font-size: 1.1em;
+          padding: 5px 10px;
+          cursor: pointer;
+          transition: 0.3s all;
+          border-radius: 5px;
+          color: #3e3e3e;
 
-#left-bar-goback {
-  border-radius: 3px 3px 0 0;
-  background-color: #e0e5ff;
-  width: 100%;
-  height: 30px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
-}
-#left-bar-goback img {
-  width: 15px;
-  height: 15px;
-  margin-left: 5px;
-  cursor: pointer;
-  transform-origin: 50% 50%;
-  transform: rotate(180deg);
-}
-#left-bar-goback span {
-  font-size: 1em;
-  margin-left: 10px;
-}
-#left-bar-mails-content {
-  height: 100%;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-}
-.left-bar-mails-content-each {
-  border-bottom: 1px solid #3e3e3e;
-  border-top: 1px solid #3e3e3e;
-  border-collapse: collapse;
-  cursor: pointer;
-  padding: 5px 10px;
-  width: 100%;
-  background-color: rgba(224, 229, 255, 0.5);
-}
-.left-bar-mails-content-each:hover {
-  background-color: rgba(224, 229, 255, 0.7);
-}
-.left-bar-mails-content-each-text {
-  display: flex;
-  flex-direction: column;
-}
-.left-bar-mails-content-each-text-from {
-  color: #0f0f0f;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-  white-space: nowrap;
-}
-.left-bar-mails-content-each-text-title {
-  width: 100%;
-  color: #0f0f0f;
-  display: flex;
-  flex-direction: row;
-  height: 1.2em;
-  font-size: 0.95em;
-  line-height: 1.2em;
-  word-break: break-all;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.left-bar-mails-content-each-text-time {
-  font-size: 0.9em;
-  color: #3e3e3e;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
-  white-space: nowrap;
-}
-
-.one-mail {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: 0.3s all;
-}
-.mail-addr {
-  width: 100%;
-  font-size: 1em;
-  padding: 5px;
-  cursor: pointer;
-  transition: 0.3s all;
-  overflow: hidden;
-}
-.mail-addr:hover {
-  background-color: #e0e5ff !important;
-}
-.mail-addr img {
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  margin-right: 5px;
-  transform-origin: 50% 50%;
-  transition: 0.3s all;
-}
-.mail-addr span {
-  line-height: 12px;
-  height: 12px;
-}
-.mail-boxes {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.mail-box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.mail-box-name {
-  width: 90%;
-  font-size: 1.1em;
-  padding: 5px 10px;
-  cursor: pointer;
-  transition: 0.3s all;
-  border-radius: 5px;
-  color: #3e3e3e;
-}
-.mail-box-name:hover {
-  background-color: #f0f5ff;
+          &:hover {
+            background-color: #f0f5ff;
+          }
+        }
+      }
+    }
+  }
 }
