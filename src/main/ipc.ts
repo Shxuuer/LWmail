@@ -12,7 +12,7 @@ export function handleIPC(accountManager: AccountManager): void {
   ipcMain.on("del-account", (event, accountAddr) =>
     delAccount(event, accountAddr, accountManager),
   );
-  ipcMain.on("open-how-to-add", openHowToAdd);
+  ipcMain.on("open-browser", (event, url) => openBrowser(url));
   ipcMain.on("get-html-by-uid", (event, accountAddr, boxPath, uid) =>
     getHtmlByUid(event, accountAddr, boxPath, uid, accountManager),
   );
@@ -77,11 +77,10 @@ async function getHtmlByUid(
 }
 
 /**
- * open browser directed to github page, show how to add a new account
+ * open browser
+ * @param url url you want to open
  */
-function openHowToAdd(): void {
-  const url: string =
-    "https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md";
+function openBrowser(url: string): void {
   shell.openExternal(url);
 }
 

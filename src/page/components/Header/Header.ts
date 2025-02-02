@@ -1,7 +1,7 @@
 import "./Header.scss";
 import $ from "jquery";
 import { createAddAccountPop } from "../WindowPop/WindowPop";
-// import { selectedMail, setSelectMail } from "../MailList/MailList";
+import { getSelectMail, setSelectMail } from "../MailList/MailList";
 
 const buttons = [
   {
@@ -15,9 +15,10 @@ const buttons = [
     alt: "del-mail",
     title: "delete selected email account",
     onClick: () => {
-      // if (!selectedMail) return;
-      // window.mail.delAccount(selectedMail as string);
-      // setSelectMail(false);
+      const selectedMail = getSelectMail();
+      if (!selectedMail) return;
+      window.mail.delAccount(selectedMail.attr("address"));
+      setSelectMail(null);
     },
   },
   {
@@ -25,7 +26,9 @@ const buttons = [
     alt: "how-to-add",
     title: "how to add a email account",
     onClick: () => {
-      window.mail.openHowToAdd();
+      const url: string =
+        "https://github.com/Shxuuer/LWmail/blob/master/doc/add-new-account.md";
+      window.mail.openBrowser(url);
     },
   },
 ];

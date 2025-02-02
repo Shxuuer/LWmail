@@ -3,7 +3,7 @@ export interface mail {
   delAccount: (accountAddr: string) => void;
   getHtmlByUid: (accountAddr: string, boxPath: string, uid: string) => string;
   onMailsUpdate: (callback: (accountBox: AccountBox[]) => void) => void;
-  openHowToAdd: () => void;
+  openBrowser: (url: string) => void;
 }
 
 declare global {

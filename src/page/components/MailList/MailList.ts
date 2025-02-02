@@ -130,6 +130,7 @@ export function createOneAccount(accountBox: AccountBox) {
       $("<div>")
         .addClass("mail-addr")
         .attr("opened", "false")
+        .attr("address", accountBox.accountAddr)
         .append($("<img>").attr("src", require("../../../assets/img/off.svg")))
         .append($("<span>").text(accountBox.accountAddr))
         .on("click", handleClickMailAddr),

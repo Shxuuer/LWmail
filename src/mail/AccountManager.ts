@@ -94,8 +94,8 @@ export class AccountManager {
       (account) => account.mailAddr === accountAddr,
     );
     if (index === -1) return;
-    this.accounts.splice(index, 1);
     this.accounts[index].close();
+    this.accounts.splice(index, 1);
     updateMailsToRenderer(this);
   }
 
@@ -140,7 +140,6 @@ export class AccountManager {
    */
   public async checkNewMails(): Promise<void> {
     setInterval(async () => {
-      console.log(this.accounts.length);
       this.accounts.forEach(async (service) => {
         const mails = await service.checkNewMails(["INBOX"]);
         if (mails.length > 0) updateMailsToRenderer(this);

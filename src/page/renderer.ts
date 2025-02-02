@@ -23,3 +23,9 @@ window.mail.onMailsUpdate((accountBoxes: AccountBox[]) => {
   console.log(accountBoxes);
   updateMailList(accountBoxes);
 });
+
+// open external link in browser
+$(document).on("click", "a", function (event) {
+  event.preventDefault();
+  window.mail.openBrowser(this.href);
+});

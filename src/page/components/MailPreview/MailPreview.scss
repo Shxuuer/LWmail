@@ -35,12 +35,6 @@
     padding: 20px;
     word-break: break-word;
     white-space: normal;
-    * {
-      max-width: 100% !important;
-      height: auto !important;
-    }
-    table {
-      table-layout: auto !important;
-    }
+    display: none;
   }
 }
