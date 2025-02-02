@@ -36,6 +36,7 @@ declare global {
     from?: { name: string; address: string };
     to?: { name: string; address: string };
     source?: string;
+    sourcePlain?: string;
     uid: string;
   };
 }

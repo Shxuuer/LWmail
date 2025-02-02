@@ -164,6 +164,34 @@ class MailService {
   }
 
   /**
+   * get mail's plain (mails' plain text) from box.
+   * @param {string} boxPath box path you want to get mail
+   * @param {number | string} uid mail's uid you want to get
+   * @returns {Promise<string>} email plain text.
+   */
+  public async getMailPlain(
+    boxPath: string,
+    uid: number | string,
+  ): Promise<string> {
+    // if cached, return source
+    let caches = this.boxCache.find((box) => box.boxPath === boxPath);
+    let cached = caches.messages.find((msg) => msg.uid === `${uid}`);
+    if (cached?.sourcePlain) return cached.sourcePlain;
+    // if not cached, download and parse
+    if (!this.client?.authenticated) await this.connect();
+    let lock = await this.client?.getMailboxLock(boxPath);
+    const binary = await this.client?.download(`${uid}`, undefined, {
+      uid: true,
+    });
+    const parsed = await simpleParser(binary.content);
+    lock?.release();
+    const plain = parsed.text;
+    // add to cache
+    caches.messages.find((msg) => msg.uid === `${uid}`).sourcePlain = plain;
+    return plain;
+  }
+
+  /**
    * get box caches
    * @returns caches
    */
@@ -209,7 +237,7 @@ class MailService {
             // find new mail
             const envelope = await this.getMailEnvelops(boxPath, uid);
             const newMail: Message = MailService.FetchMessage2Message(envelope);
-            caches.messages.push(newMail);
+            caches.messages.unshift(newMail);
             newMails.push(newMail);
           }
         });

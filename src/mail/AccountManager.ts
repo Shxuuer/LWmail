@@ -2,7 +2,7 @@ import { MailService } from "./MailService";
 import { updateMailsToRenderer } from "../main/ipc";
 import * as path from "path";
 import fs from "fs";
-import { safeStorage } from "electron";
+import { safeStorage, Notification } from "electron";
 
 export class AccountManager {
   // registered accounts list
@@ -141,8 +141,18 @@ export class AccountManager {
   public async checkNewMails(): Promise<void> {
     setInterval(async () => {
       this.accounts.forEach(async (service) => {
-        const mails = await service.checkNewMails(["INBOX"]);
-        if (mails.length > 0) updateMailsToRenderer(this);
+        const mails: Message[] = await service.checkNewMails(["INBOX"]);
+        if (mails.length > 0) {
+          updateMailsToRenderer(this);
+          // show notification to operating system
+          mails.forEach(async (mail) => {
+            const plain: string = await service.getMailPlain("INBOX", mail.uid);
+            new Notification({
+              title: mail.subject,
+              body: plain,
+            }).show();
+          });
+        }
       });
     }, 5000);
   }
