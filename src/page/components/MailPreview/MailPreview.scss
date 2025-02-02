@@ -29,7 +29,18 @@
     overflow: auto;
     text-shadow: none;
     color: #000;
-    user-select: all;
-    display: none;
+    user-select: auto;
+    margin: auto;
+    box-sizing: border-box;
+    padding: 20px;
+    word-break: break-word;
+    white-space: normal;
+    * {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    table {
+      table-layout: auto !important;
+    }
   }
 }
