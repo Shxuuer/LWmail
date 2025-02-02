@@ -5,6 +5,15 @@ import { AccountManager } from "./mail/AccountManager";
 
 export let accountManager: AccountManager | null = null;
 
+if (app.isPackaged) {
+  const ex = process.execPath;
+  app.setLoginItemSettings({
+    openAtLogin: true,
+    path: ex,
+    args: [],
+  });
+}
+
 if (require("electron-squirrel-startup")) {
   app.quit();
 }

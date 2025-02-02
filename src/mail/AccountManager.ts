@@ -8,7 +8,7 @@ export class AccountManager {
   // registered accounts list
   private accounts: MailService[] = [];
   // path to store account information
-  private readonly configPath = path.join(__dirname, "../../config/mails");
+  private readonly configPath = path.join(__dirname, "../config/mails");
 
   constructor() {
     // create config path if not exists
